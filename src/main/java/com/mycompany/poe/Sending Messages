@@ -1,0 +1,130 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package sending.messages;
+import java.util.Scanner;
+/**
+ *
+ * @author user
+ */
+public class SendingMessages {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+        Scanner input = new Scanner(System.in);
+        
+        System.out.println("Welcome to Quickchat");
+        
+        System.out.print("Enter number of messages you want to send:");
+        int numMessages = input.nextInt();
+        input.nextLine();
+        
+        int choice = 0;
+        
+        while (choice != 3) {
+            
+            System.out.print("\nChoose an option");
+            System.out.println("1. Send Messages");
+            System.out.println("2. Show recently sent messages");
+            System.out.println("3. Quit");
+            
+            System.out.print("Enter option: ");
+            choice = input.nextInt();
+            input.nextLine();
+            
+            if (choice == 1) {
+                
+                for (int i = 0; i < numMessages; i++) {
+                    
+                    System.out.println("\nMessage " + (i + 1));
+                    
+                    System.out.print("Enter recipient number: ");
+                    String recipient = input.nextLine();
+                    
+                    if (checkRecipientCell(recipient)) {
+                        System.out.println("Cell phone number capturedsuccessfully.");
+                    } else {
+                        System.out.println("Cell phone number is incorrectly formatted.");
+                        continue;
+                    }
+                    
+                    System.out.print("Enter your message: ");
+                    String message = input.nextLine();
+                    
+                    if (message.length() > 250) {
+                        System.out.println("Please enter a message of less than 250 characters.");
+                    } else {
+                        
+                        String messageID = createMessageID();
+                        
+                        String hash = createMessageHash(messageID, i, message);
+                        
+                        System.out.println("Message sent");
+                        System.out.println("Message ID: " + messageID);
+                        System.out.println("Message Hash: " + hash);
+                        
+                       int totalMessages = 0;
+                    }
+                }
+            } else if (choice == 2) {
+                
+                System.out.println("Coming Soon.");
+                
+            } else if (choice == 3) {
+                
+                System.out.println("Goodbye.");
+            
+            } else {
+                
+                System.out.println("Invalid option.");
+            }
+            
+        }
+        
+        System.out.println("Total messages sent: " + totalMessages);
+    }
+    
+    
+    public static boolean checkRecipientCell(String number) {
+        
+        if (number.startsWith("+27") && number.length() <=12) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
+    public static String createMessageID() {
+        
+        long number = (long)(Math.random() * 10000000000L);
+        
+        String id = String.valueOf(number);
+        
+        while (id.length() < 10) {
+            id = "0" + id;
+        }
+        
+        return id;
+        
+    }
+    
+    
+    public static String createMessageHash(String id, int messageNum, String message) {
+        
+        String[] words = message.split(" ");
+        
+        String firstWord = words[0].toUpperCase();
+        
+        String lastWord = words[words.length - 1].toUpperCase();
+        
+        String hash = id.substring(0, 2) + ":" + messageNum + ":" + firstWord + lastWord;
+        
+        return hash;
+    }
+}
+
